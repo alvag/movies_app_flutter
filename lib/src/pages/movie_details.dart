@@ -11,6 +11,13 @@ class MovieDetails extends StatelessWidget {
         child: CustomScrollView(
           slivers: <Widget>[
             _crearAppBar(movie),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                SizedBox(height: 10.0),
+                _movieTitle(context, movie),
+                _description(movie),
+              ]),
+            ),
           ],
         ),
       ),
@@ -39,6 +46,54 @@ class MovieDetails extends StatelessWidget {
           fit: BoxFit.cover,
           fadeInDuration: Duration(seconds: 1),
         ),
+      ),
+    );
+  }
+
+  Widget _movieTitle(BuildContext context, Movie movie) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      child: Row(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: Image(
+              image: NetworkImage(movie.getPosterImage()),
+              height: 150.0,
+            ),
+          ),
+          SizedBox(width: 20.0),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(movie.title,
+                    style: Theme.of(context).textTheme.title,
+                    overflow: TextOverflow.ellipsis),
+                Text(movie.originalTitle,
+                    style: Theme.of(context).textTheme.subhead,
+                    overflow: TextOverflow.ellipsis),
+                Row(
+                  children: <Widget>[
+                    Icon(Icons.star_border),
+                    Text(movie.voteAverage.toString(),
+                        style: Theme.of(context).textTheme.subhead)
+                  ],
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _description(Movie movie) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+      child: Text(
+        movie.overview,
+        textAlign: TextAlign.justify,
       ),
     );
   }
