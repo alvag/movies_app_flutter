@@ -9,6 +9,7 @@ class MoviesProvider {
   String _baseUrl = 'api.themoviedb.org';
   String _language = 'es-ES';
   int _popularesPage = 0;
+  bool _loading = false;
 
   List<Movie> _populares = new List();
 
@@ -38,6 +39,12 @@ class MoviesProvider {
 
   /// Retorna un listado de películas populares
   Future<List<Movie>> getPopularMovies() async {
+    if (_loading) {
+      return [];
+    }
+
+    _loading = true;
+
     _popularesPage++;
 
     final uri = Uri.https(_baseUrl, '3/movie/popular', {
@@ -51,7 +58,7 @@ class MoviesProvider {
     _populares.addAll(response);
 
     popularesSink(_populares);
-
+    _loading = false;
     return response;
   }
 }
