@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:movies/environments/env.dart';
+import 'package:movies/src/models/actor_model.dart';
 import 'package:movies/src/models/movie_model.dart';
 
 class MoviesProvider {
@@ -24,7 +25,7 @@ class MoviesProvider {
     _popularesStreamController?.close();
   }
 
-  Future<List<Movie>> _fetchData(Uri uri) async {
+  Future<List<Movie>> _fetchMovies(Uri uri) async {
     http.Response response = await http.get(uri);
     final data = json.decode(response.body);
     return new Movies.fromJsonList(data['results']).items;
@@ -34,7 +35,7 @@ class MoviesProvider {
   Future<List<Movie>> getMovies() async {
     final uri = Uri.https(_baseUrl, '3/movie/now_playing',
         {'api_key': TMDB_API_KEY, 'page': '1', 'language': _language});
-    return await _fetchData(uri);
+    return await _fetchMovies(uri);
   }
 
   /// Retorna un listado de películas populares
@@ -54,11 +55,21 @@ class MoviesProvider {
       'page': _popularesPage.toString()
     });
 
-    final response = await _fetchData(uri);
+    final response = await _fetchMovies(uri);
     _populares.addAll(response);
 
     popularesSink(_populares);
     _loading = false;
     return response;
+  }
+
+  Future<List<Actor>> getCast(String movieId) async {
+    final uri = Uri.https(
+        _baseUrl, '3/movie/$movieId/credits', {'api_key': TMDB_API_KEY});
+
+    http.Response response = await http.get(uri);
+    final data = json.decode(response.body);
+    final cast = new Cast.fromJsonList(data['cast']);
+    return cast.actors;
   }
 }

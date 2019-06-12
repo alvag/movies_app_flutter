@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'package:movies/src/models/actor_model.dart';
 import 'package:movies/src/models/movie_model.dart';
+import 'package:movies/src/providers/movies_provider.dart';
 
 class MovieDetails extends StatelessWidget {
   @override
@@ -16,6 +19,7 @@ class MovieDetails extends StatelessWidget {
                 SizedBox(height: 10.0),
                 _movieTitle(context, movie),
                 _description(movie),
+                _showCast(movie.id),
               ]),
             ),
           ],
@@ -35,6 +39,7 @@ class MovieDetails extends StatelessWidget {
         centerTitle: true,
         title: Text(
           movie.title,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: Colors.white,
             fontSize: 16.0,
@@ -94,6 +99,58 @@ class MovieDetails extends StatelessWidget {
       child: Text(
         movie.overview,
         textAlign: TextAlign.justify,
+      ),
+    );
+  }
+
+  Widget _showCast(int id) {
+    final moviesProvider = new MoviesProvider();
+    return FutureBuilder(
+      future: moviesProvider.getCast(id.toString()),
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+        if (snapshot.hasData) {
+          return _createCastPageView(snapshot.data);
+        }
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget _createCastPageView(List<Actor> actores) {
+    return SizedBox(
+      height: 200.0,
+      child: PageView.builder(
+        pageSnapping: false,
+        controller: PageController(
+          viewportFraction: 0.3,
+          initialPage: 1,
+        ),
+        itemCount: actores.length,
+        itemBuilder: (context, i) {
+          return _actorCard(actores[i]);
+        },
+      ),
+    );
+  }
+
+  Widget _actorCard(Actor actor) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: FadeInImage.assetNetwork(
+              placeholder: 'assets/images/generic-avatar.png',
+              image: actor.getProfileImage(),
+              fit: BoxFit.cover,
+              height: 150.0,
+            ),
+          ),
+          Text(
+            actor.name,
+            overflow: TextOverflow.ellipsis,
+          )
+        ],
       ),
     );
   }
