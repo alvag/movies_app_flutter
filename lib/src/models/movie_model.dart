@@ -65,7 +65,7 @@ class Movie {
 
   getPosterImage() {
     if (posterPath == null) {
-      return 'assets/images/film-poster-placeholder.png';
+      return null;
     }
     return 'https://image.tmdb.org/t/p/w500$posterPath';
   }

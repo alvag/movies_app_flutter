@@ -142,9 +142,9 @@ class MovieDetails extends StatelessWidget {
         children: <Widget>[
           ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
-            child: FadeInImage.assetNetwork(
-              placeholder: 'assets/images/generic-avatar.png',
-              image: actor.getProfileImage(),
+            child: FadeInImage(
+              image: NetworkImage(actor.getProfileImage()),
+              placeholder: AssetImage('assets/images/generic-avatar.png'),
               fit: BoxFit.cover,
               height: 150.0,
             ),

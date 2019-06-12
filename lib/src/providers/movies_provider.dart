@@ -38,6 +38,12 @@ class MoviesProvider {
     return await _fetchMovies(uri);
   }
 
+  Future<List<Movie>> searchMovies(String query) async {
+    final uri = Uri.https(_baseUrl, '3/search/movie',
+        {'api_key': TMDB_API_KEY, 'language': _language, 'query': query});
+    return await _fetchMovies(uri);
+  }
+
   /// Retorna un listado de películas populares
   Future<List<Movie>> getPopularMovies() async {
     if (_loading) {
