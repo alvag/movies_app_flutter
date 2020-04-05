@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+
 import 'package:movies/src/models/movie_model.dart';
 
 class CardSwiper extends StatelessWidget {
@@ -17,6 +18,9 @@ class CardSwiper extends StatelessWidget {
         layout: SwiperLayout.STACK,
         itemWidth: _screenSize.width * 0.7,
         itemHeight: _screenSize.height * 0.5,
+        itemCount: movies.length,
+        // pagination: new SwiperPagination(),
+        // control: new SwiperControl(),
         itemBuilder: (BuildContext context, int index) {
           movies[index].uniqueId = '${movies[index].id}-card';
           final image = Hero(
@@ -38,9 +42,6 @@ class CardSwiper extends StatelessWidget {
             },
           );
         },
-        itemCount: movies.length,
-        // pagination: new SwiperPagination(),
-        // control: new SwiperControl(),
       ),
     );
   }

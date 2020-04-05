@@ -17,8 +17,7 @@ class MovieHorizontal extends StatelessWidget {
     final _screenSize = MediaQuery.of(context).size;
 
     _pageController.addListener(() {
-      if (_pageController.position.pixels >=
-          _pageController.position.maxScrollExtent - 200) {
+      if (_pageController.position.pixels >= _pageController.position.maxScrollExtent - 200) {
         nextPage();
       }
     });

@@ -10,14 +10,13 @@ class MoviesProvider {
   String _baseUrl = 'api.themoviedb.org';
   String _language = 'es-ES';
   int _popularesPage = 0;
-  bool _loading = false;
+  bool _isLoading = false;
 
   List<Movie> _populares = new List();
 
   final _popularesStreamController = StreamController<List<Movie>>.broadcast();
 
-  Function(List<Movie>) get popularesSink =>
-      _popularesStreamController.sink.add;
+  Function(List<Movie>) get popularesSink => _popularesStreamController.sink.add;
 
   Stream<List<Movie>> get popularesStream => _popularesStreamController.stream;
 
@@ -46,17 +45,16 @@ class MoviesProvider {
 
   /// Retorna un listado de películas populares
   Future<List<Movie>> getPopularMovies() async {
-    if (_loading) {
+    if (_isLoading) {
       return [];
     }
 
-    _loading = true;
+    _isLoading = true;
 
     _popularesPage++;
 
     final uri = Uri.https(_baseUrl, '3/movie/popular', {
       'api_key': TMDB_API_KEY,
-      'page': '1',
       'language': _language,
       'page': _popularesPage.toString()
     });
@@ -65,7 +63,7 @@ class MoviesProvider {
     _populares.addAll(response);
 
     popularesSink(_populares);
-    _loading = false;
+    _isLoading = false;
     return response;
   }
 
