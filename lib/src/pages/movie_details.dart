@@ -106,10 +106,10 @@ class MovieDetails extends StatelessWidget {
     );
   }
 
-  Widget _showCast(int id) {
+  Widget _showCast(int movieId) {
     final moviesProvider = new MoviesProvider();
     return FutureBuilder(
-      future: moviesProvider.getCast(id.toString()),
+      future: moviesProvider.getCast(movieId.toString()),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         if (snapshot.hasData) {
           return _createCastPageView(snapshot.data);

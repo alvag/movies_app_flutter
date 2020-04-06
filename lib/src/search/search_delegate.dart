@@ -7,6 +7,9 @@ class DataSearch extends SearchDelegate {
   final moviesProvider = new MoviesProvider();
 
   @override
+  String get searchFieldLabel => 'Buscar...';
+
+  @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
